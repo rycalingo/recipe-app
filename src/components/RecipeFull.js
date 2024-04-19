@@ -2,7 +2,7 @@ import React from 'react';
 import { X } from "react-feather"
 
 const RecipeFull = ({selectedRecipe, handleUnselectRecipe}) => {
-	const recipe_ingredients =  selectedRecipe ? selectedRecipe.ingredients.split(',') : ['—'];
+	const recipe_ingredients =  selectedRecipe ? selectedRecipe.ingredients.split('\n') : ['—'];
 	return (
 		<div className='recipe-details'>
 			<article>

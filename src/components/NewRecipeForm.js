@@ -1,36 +1,36 @@
 import React from 'react';
 
-const NewRecipeForm = ({newRecipe, hideRecipeForm, onUpdateForm}) => {
+const NewRecipeForm = ({newRecipe, hideRecipeForm, onUpdateForm, handleNewRecipe}) => {
 	return (
 		<div className='recipe-details'>
 			<div className='recipe-form'>
 				<h2>New Recipe</h2>
 				<button className='cancel-button' onClick={hideRecipeForm}>Cancel</button>
 
-				<form>
+				<form onSubmit={(e) => handleNewRecipe(e, newRecipe)} >
 					<label>Title</label>
-					<input type='text' name='title' value='' onChange={onUpdateForm} required />
+					<input type='text' name='title' value={newRecipe.title} onChange={onUpdateForm} required />
 
 					<label>Ingredients</label>
 					<textarea
 						name='ingredients'
-						value=''
+						value={newRecipe.ingredients}
 						onChange={onUpdateForm}
 						required
-						placeholder='Add ingredients separated by commas - i.e. Flour, sugar, almonds'
+						placeholder='Add ingredients separated by semicolon - i.e. Flour; sugar; almonds'
 					/>
 
 					<label>Instructions</label>
-					<textarea name='instructions' value='' onChange={onUpdateForm} required />
+					<textarea name='instructions' value={newRecipe.instructions} onChange={onUpdateForm} required />
 
 					<label>Description</label>
-					<textarea name='description' value='' onChange={onUpdateForm} required />
+					<textarea name='description' value={newRecipe.description} onChange={onUpdateForm} required />
 
 					<label>Image</label>
-					<input type='text' name='image_url' value='' onChange={onUpdateForm} required />
+					<input type='text' name='image_url' value={newRecipe.image_url} onChange={onUpdateForm} required />
 
 					<label>Servings</label>
-					<input type='number' name='servings' value='' onChange={onUpdateForm} required />
+					<input type='number' name='servings' value={newRecipe.servings} onChange={onUpdateForm} required />
 
 					<button type='submit'>Save Recipe</button>
 				</form>
