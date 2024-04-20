@@ -23,6 +23,7 @@ function App() {
 	const [selectedRecipe, setSelectedRecipe] = useState(null);
 	const [newRecipe, setNewRecipe] = useState(recipeForm);
 	const [showNewRecipeForm, setShowNewRecipeForm] = useState(false);
+	const [searchTerm, setSearchTerm] = useState('');
 
 
 	const handleNewRecipe = async(e, newRecipe) => {
@@ -76,7 +77,6 @@ function App() {
 	}
 
 	const handleDeleteRecipe = async(recipeId) => {
-		console.log(selectedRecipe.id);
 		try {
 			const response = await fetch(`${api_url}/${selectedRecipe.id}`, {method: 'DELETE'});
 			if (response.ok) {
@@ -111,7 +111,7 @@ function App() {
 	}, []);
 
 
-	function handleSelectRecipe(recipe) {
+	const handleSelectRecipe = (recipe) => {
 		setSelectedRecipe(recipe);
 	}
 
@@ -134,9 +134,23 @@ function App() {
 		if (action === 'new') setNewRecipe({ ...newRecipe, [name]: value });
 	}
 
+	const updateSearchTerm = (e) => {
+		setSearchTerm(e.target.value);
+	}
+
+	const handleSearch = () => {
+		const searchResults = recipes.filter(recipe=> {
+			const valuesToSearch = [recipe.title, recipe.ingredients, recipe.description];
+			return valuesToSearch.some(value=> value.toLowerCase().includes(searchTerm.toLowerCase()));
+		});
+		return searchResults;
+	}
+
+	const displayedRecipes = searchTerm ?  handleSearch() : recipes;
+
 	return (
 		<div className='recipe-app'>
-			<Header showRecipeForm={showRecipeForm} />
+			<Header showRecipeForm={showRecipeForm} searchTerm={searchTerm} updateSearchTerm={updateSearchTerm} />
 			{showNewRecipeForm && <NewRecipeForm newRecipe={newRecipe} hideRecipeForm={hideRecipeForm}
 															onUpdateForm={onUpdateForm} handleNewRecipe={handleNewRecipe} /> }
 			
@@ -151,7 +165,7 @@ function App() {
 				(!selectedRecipe && !showNewRecipeForm)
 			&&
 				<div className='recipe-list'>
-					{ !selectedRecipe && recipes.map((recipe) => (
+					{ !selectedRecipe && displayedRecipes.map((recipe) => (
 						<RecipeExcerpt key={recipe.id} recipe={recipe} handleSelectRecipe={handleSelectRecipe}/>
 						))
 					}
