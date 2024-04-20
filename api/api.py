@@ -107,7 +107,7 @@ def update_recipe(recipe_id):
     }
     return jsonify({'message': 'Recipe updated successfully', 'recipe': updated_recipe})
 
-app.route('/api/recipes/<int:recipe_id>', methods=['DELETE'])
+@app.route('/api/recipes/<int:recipe_id>', methods=['DELETE'])
 def delete_recipe(recipe_id):
     recipe = Recipe.query.get(recipe_id)
     if not recipe:
