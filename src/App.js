@@ -7,6 +7,11 @@ import NewRecipeForm from "./components/NewRecipeForm";
 
 import "./App.css";
 
+import { displayToast } from "./utils/toastHelper";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
+
+
 const api_url = '/api/recipes';
 
 const recipeForm = {
@@ -42,11 +47,12 @@ function App() {
 				setRecipes([...recipes, data.recipe]);
 				setNewRecipe(recipeForm);
 				setShowNewRecipeForm(false);
-
+				displayToast('Recipe added successfully!', 'success');
 			} else {
-				throw new Error("Server responded with an error.");
+				throw new Error('Server responded with an error.');
 			}
 		} catch(e) {
+			displayToast('Oops, could not add recipe!', 'error');
 			console.log('Something went wrong,',  e);
 		}
 	}
@@ -66,11 +72,12 @@ function App() {
 			if  (response.ok) {
 				const data = await response.json();
 				setRecipes(recipes.map(recipe=> recipe.id === id ? data.recipe : recipe ));
-				console.log('Recipe was successfully updated!');
+				displayToast("Recipe was successfully updated!", 'success');
 			} else {
 				throw new Error("Server responded with an error.");
 			}
 		} catch(e) {
+			displayToast('Oops, could not update recipe!', 'error');
 			console.log('Something went wrong,', e);
 		}
 		setSelectedRecipe(null);
@@ -82,7 +89,7 @@ function App() {
 			if (response.ok) {
 				setRecipes(recipes.filter((recipe)=> recipe.id !== recipeId));
 				setSelectedRecipe(null);
-				console.log('Recipe was successfully removed!');
+				displayToast('Recipe was successfully removed!', 'success');
 			} else {
 				throw new Error('Unable to remove recipe.');
 			}
@@ -98,11 +105,10 @@ function App() {
 				const data = await response.json();
 				setRecipes(data);
 			} else {
-				console.log("Oops - could not fetch recipes!", "error");
+				throw new Error("Oops - could not fetch recipes!");
 			}
 		} catch (e) {
 			console.error("An error occurred during the request:", e);
-			console.log("An unexpected error occurre  d. Please try again later.", "error");
 		}
 	};
 
@@ -146,11 +152,18 @@ function App() {
 		return searchResults;
 	}
 
+	const displayAllRecipes = () => {
+		setSearchTerm('');
+		setSelectedRecipe(null);
+		setShowNewRecipeForm(false);
+	}
+
 	const displayedRecipes = searchTerm ?  handleSearch() : recipes;
 
 	return (
 		<div className='recipe-app'>
-			<Header showRecipeForm={showRecipeForm} searchTerm={searchTerm} updateSearchTerm={updateSearchTerm} />
+			<Header showRecipeForm={showRecipeForm} searchTerm={searchTerm} 
+				updateSearchTerm={updateSearchTerm} displayAllRecipes={displayAllRecipes} />
 			{showNewRecipeForm && <NewRecipeForm newRecipe={newRecipe} hideRecipeForm={hideRecipeForm}
 															onUpdateForm={onUpdateForm} handleNewRecipe={handleNewRecipe} /> }
 			
@@ -171,6 +184,7 @@ function App() {
 					}
 				</div>
 			}
+			<ToastContainer />
 		</div>
 	);
 }

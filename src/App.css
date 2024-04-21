@@ -224,6 +224,18 @@ header .new-recipe:hover {
   font-size: 1.125rem;
 }
 
+.recipe-card figure {
+  width: 100%;
+  max-height: 40%;
+  overflow: hidden;
+}
+
+.recipe-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Recipe Details */
 
 .recipe-details {
@@ -256,6 +268,18 @@ header .new-recipe:hover {
 .recipe-details article {
   padding: 2.25rem;
 }
+
+.recipe-details figure img {
+  width: 100%;
+  max-height: 600px;
+  overflow: hidden;
+}
+
+.recipe-details figure img {
+  width: 100%;
+  overflow: hidden;
+}
+
 
 .recipe-details .button-container {
   display: flex;
